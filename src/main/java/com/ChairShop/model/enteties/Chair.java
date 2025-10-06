@@ -3,7 +3,7 @@ package com.ChairShop.model.enteties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
+import org.hibernate.validator.internal.constraintvalidators.bv.number.bound.decimal.DecimalMinValidatorForFloat;
 
 
 import java.text.DecimalFormat;
@@ -29,7 +29,7 @@ public class Chair {
     public String category;
 
     @Column (nullable = false)
-    public DecimalFormat price;
+    public Float price;
 
     @Column (nullable = false)
     public Integer stock;
@@ -37,7 +37,7 @@ public class Chair {
     @Column (nullable = false)
     public String material;
 
-    @Column (name = "image_URL", nullable = false)
+    @Column (name = "image_url", nullable = false)
     public String imageUrl;
 
     @Column (name = "created_at", nullable = false)
