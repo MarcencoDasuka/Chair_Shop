@@ -1,0 +1,39 @@
+package com.ChairShop.controller;
+
+import com.ChairShop.service.PostService;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+import java.util.Objects;
+
+
+@RestController
+@RequestMapping("/post")
+public class PostController {
+    private final PostService postService;
+
+
+    @Autowired
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<String> createPost(@RequestBody Map<String, Object> requestBody){
+        String title = (String) requestBody.get("title");
+        String content = (String) requestBody.get("content");
+        String postContent = "Title: " + title + "\nContent: " + content + "\n";
+
+
+        postService.CreatePost(postContent);
+
+        return new ResponseEntity<>("message: " + title + content, HttpStatus.OK);
+    }
+}
