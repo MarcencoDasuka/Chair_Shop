@@ -1,5 +1,6 @@
 package com.ChairShop.service.impl;
 
+import com.ChairShop.mapper.ChairMapper;
 import com.ChairShop.model.constants.ApiErrorMessage;
 import com.ChairShop.model.dto.chair.ChairDTO;
 import com.ChairShop.model.enteties.Chair;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class ChairServiceImpl implements ChairService{
 
     private final ChairRepository chairRepository;
+    private final ChairMapper chairMapper;
 
     @Override
     public IamResponse<ChairDTO> getById(@NotNull Integer chairId) {
@@ -25,20 +27,20 @@ public class ChairServiceImpl implements ChairService{
                 .orElseThrow(()->new NotFoundException(ApiErrorMessage.CHAIR_WITH_ID_NOT_FOUND.getMessage(chairId)));
 
 
-        ChairDTO chairDTO = ChairDTO.builder()
-                .id(chair.getId())
-                .price(chair.getPrice())
-                .stock(chair.getStock())
-                .name(chair.getName())
-                .description(chair.getDescription())
-                .category(chair.getCategory())
-                .material(chair.getMaterial())
-                .createdAt(chair.getCreatedAt())
-                .imageUrl(chair.getImageUrl())
-                .updatedAt(chair.getUpdatedAt())
-                .build();
+//        ChairDTO chairDTO = ChairDTO.builder()
+//                .id(chair.getId())
+//                .price(chair.getPrice())
+//                .stock(chair.getStock())
+//                .name(chair.getName())
+//                .description(chair.getDescription())
+//                .category(chair.getCategory())
+//                .material(chair.getMaterial())
+//                .createdAt(chair.getCreatedAt())
+//                .imageUrl(chair.getImageUrl())
+//                .updatedAt(chair.getUpdatedAt())
+//                .build();
 
-        return IamResponse.createSuccessful(chairDTO);
+        return IamResponse.createSuccessful(chairMapper.toChairDTO(chair));
     }
 
 }

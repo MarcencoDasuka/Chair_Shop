@@ -1,6 +1,7 @@
 package com.ChairShop.controller;
 
 
+import com.ChairShop.mapper.ChairMapper;
 import com.ChairShop.model.constants.ApiErrorMessage;
 import com.ChairShop.model.constants.ApiLogMessage;
 import com.ChairShop.model.dto.chair.ChairDTO;
@@ -21,7 +22,6 @@ public class ChairController {
 
 
     private final ChairService chairService;
-
 
     @GetMapping("/{id}")
     public ResponseEntity<IamResponse<ChairDTO>> getChairById(@PathVariable Integer id){
