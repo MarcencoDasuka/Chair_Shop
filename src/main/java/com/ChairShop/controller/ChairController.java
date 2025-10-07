@@ -6,6 +6,7 @@ import com.ChairShop.model.constants.ApiErrorMessage;
 import com.ChairShop.model.constants.ApiLogMessage;
 import com.ChairShop.model.dto.chair.ChairDTO;
 import com.ChairShop.model.enteties.Chair;
+import com.ChairShop.model.request.chair.ChairRequest;
 import com.ChairShop.model.response.IamResponse;
 import com.ChairShop.repositories.ChairRepository;
 import com.ChairShop.service.ChairService;
@@ -26,9 +27,18 @@ public class ChairController {
     @GetMapping("/{id}")
     public ResponseEntity<IamResponse<ChairDTO>> getChairById(@PathVariable Integer id){
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiLogMessage.CHAIR_INFO_BY_ID);
-
         IamResponse<ChairDTO> response = chairService.getById(id);
+
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<IamResponse<ChairDTO>> createChair(@RequestBody ChairRequest chairRequest) {
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiLogMessage.CHAIR_INFO_BY_ID);
+        IamResponse<ChairDTO> response = chairService.createChair(chairRequest);
+
+        return ResponseEntity.ok(response);
+    }
+
 
 }

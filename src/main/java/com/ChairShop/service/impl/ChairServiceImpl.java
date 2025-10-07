@@ -5,6 +5,7 @@ import com.ChairShop.model.constants.ApiErrorMessage;
 import com.ChairShop.model.dto.chair.ChairDTO;
 import com.ChairShop.model.enteties.Chair;
 import com.ChairShop.model.exception.NotFoundException;
+import com.ChairShop.model.request.chair.ChairRequest;
 import com.ChairShop.model.response.IamResponse;
 import com.ChairShop.repositories.ChairRepository;
 import com.ChairShop.service.ChairService;
@@ -43,4 +44,12 @@ public class ChairServiceImpl implements ChairService{
         return IamResponse.createSuccessful(chairMapper.toChairDTO(chair));
     }
 
+    @Override
+    public IamResponse<ChairDTO> createChair(@NotNull ChairRequest chairRequest) {
+        Chair chair = chairMapper.createChair(chairRequest);
+        Chair saveChair = chairRepository.save(chair);
+        ChairDTO chairDTO = chairMapper.toChairDTO(chair);
+
+        return IamResponse.createSuccessful(chairDTO);
+    }
 }

@@ -3,6 +3,7 @@ package com.ChairShop.mapper;
 
 import com.ChairShop.model.dto.chair.ChairDTO;
 import com.ChairShop.model.enteties.Chair;
+import com.ChairShop.model.request.chair.ChairRequest;
 import org.hibernate.type.descriptor.DateTimeUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -30,5 +31,18 @@ public interface ChairMapper {
 //    @Mapping(source = "createAt", target = "CreateAt", dateFormat = "yyyy-MM-DD'T'HH:mm:ss")
 //    @Mapping(source = "updateAt", target = "updateAt", dateFormat = "yyyy-MM-DD'T'HH:mm:ss")
     ChairDTO toChairDTO(Chair chair);
+
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "name", target = "name")
+    @Mapping(source = "description", target = "description")
+    @Mapping(source = "category", target = "category")
+    @Mapping(source = "price", target = "price")
+    @Mapping(source = "stock", target = "stock")
+    @Mapping(source = "material", target = "material")
+    @Mapping(source = "imageUrl", target = "imageUrl")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    Chair createChair(ChairRequest chairRequest);
 
 }
