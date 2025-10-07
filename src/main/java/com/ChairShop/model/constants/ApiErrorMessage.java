@@ -8,6 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor (access = AccessLevel.PRIVATE)
 public enum ApiErrorMessage {
     CHAIR_WITH_ID_NOT_FOUND("Chair with Id %s was not found"),
+    CHAIR_WITH_NAME_ALREADY_EXISTS("Chair with name %s already exists"),
     ;
 
     private final String message;

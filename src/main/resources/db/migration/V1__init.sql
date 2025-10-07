@@ -1,6 +1,6 @@
 CREATE TABLE chairs (
                           id SERIAL PRIMARY KEY,                       -- Уникальный идентификатор товара
-                          name VARCHAR(255) NOT NULL,                  -- Название стула
+                          name VARCHAR(255) NOT NULL UNIQUE,                   -- Название стула
                           description TEXT,                            -- Подробное описание
                           category VARCHAR(100),                       -- Категория (например: офисный, кухонный и т.д.)
                           price NUMERIC(10,2) NOT NULL CHECK (price >= 0),  -- Цена, с проверкой на неотрицательность
@@ -8,7 +8,8 @@ CREATE TABLE chairs (
                           material VARCHAR(100),                       -- Материал (например: дерево, металл, пластик)
                           image_url TEXT,                              -- Ссылка на изображение товара
                           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,   -- Дата добавления
-                          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP     -- Дата последнего обновления
+                          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- Дата последнего обновления
+                          deleted BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 

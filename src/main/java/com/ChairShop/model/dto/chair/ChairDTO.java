@@ -38,5 +38,4 @@ public class ChairDTO implements Serializable {
 
     public LocalDateTime createdAt = LocalDateTime.now();
 
-    public LocalDateTime updatedAt = LocalDateTime.now();
 }

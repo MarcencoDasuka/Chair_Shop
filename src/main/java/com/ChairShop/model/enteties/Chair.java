@@ -19,7 +19,7 @@ public class Chair {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     public Integer id;
 
-    @Column (nullable = false)
+    @Column (nullable = false, unique = true)
     public String name;
 
     @Column (nullable = false)
@@ -40,10 +40,13 @@ public class Chair {
     @Column (name = "image_url", nullable = false)
     public String imageUrl;
 
-    @Column (name = "created_at", nullable = false)
+    @Column (name = "created_at", nullable = false, updatable = false)
     public LocalDateTime createdAt = LocalDateTime.now();
 
     @Column (name = "updated_at", nullable = false)
     public LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Column(nullable = false)
+    public boolean deleted = false;
 
 }

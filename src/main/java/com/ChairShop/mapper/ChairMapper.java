@@ -3,10 +3,12 @@ package com.ChairShop.mapper;
 
 import com.ChairShop.model.dto.chair.ChairDTO;
 import com.ChairShop.model.enteties.Chair;
-import com.ChairShop.model.request.chair.ChairRequest;
+import com.ChairShop.model.request.chair.NewChairRequest;
+import com.ChairShop.model.request.chair.UpdateChairRequest;
 import org.hibernate.type.descriptor.DateTimeUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.Objects;
@@ -43,6 +45,18 @@ public interface ChairMapper {
     @Mapping(source = "imageUrl", target = "imageUrl")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    Chair createChair(ChairRequest chairRequest);
+    Chair createChair(NewChairRequest newChairRequest);
+
+
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "name", target = "name")
+    @Mapping(source = "description", target = "description")
+    @Mapping(source = "price", target = "price")
+    @Mapping(source = "stock", target = "stock")
+    @Mapping(source = "imageUrl", target = "imageUrl")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    void updateChair(@MappingTarget Chair chair, UpdateChairRequest updateChairRequest);
 
 }
