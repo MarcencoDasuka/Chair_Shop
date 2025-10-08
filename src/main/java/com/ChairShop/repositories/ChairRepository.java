@@ -13,4 +13,5 @@ public interface ChairRepository extends JpaRepository<Chair, Integer> {
 
 
     Optional<Chair> findByIdAndDeletedFalse(Integer id);
+
 }

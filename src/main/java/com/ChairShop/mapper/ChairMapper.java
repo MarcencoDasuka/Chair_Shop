@@ -2,6 +2,7 @@ package com.ChairShop.mapper;
 
 
 import com.ChairShop.model.dto.chair.ChairDTO;
+import com.ChairShop.model.dto.chair.ChairSearchDTO;
 import com.ChairShop.model.enteties.Chair;
 import com.ChairShop.model.request.chair.NewChairRequest;
 import com.ChairShop.model.request.chair.UpdateChairRequest;
@@ -58,5 +59,8 @@ public interface ChairMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     void updateChair(@MappingTarget Chair chair, UpdateChairRequest updateChairRequest);
+
+//    @Mapping(target = "isDeleted", source = "deleted")
+    ChairSearchDTO toChairSearchDTO (Chair chair);
 
 }

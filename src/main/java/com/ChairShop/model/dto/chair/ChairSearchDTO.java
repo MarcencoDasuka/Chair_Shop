@@ -1,24 +1,18 @@
 package com.ChairShop.model.dto.chair;
 
 
-import com.ChairShop.service.ChairService;
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
-
-@Builder
-@Data
 @AllArgsConstructor
+@Data
 @NoArgsConstructor
-public class ChairDTO implements Serializable {
-
+public class ChairSearchDTO implements Serializable {
 
     public Integer id;
 
@@ -36,7 +30,7 @@ public class ChairDTO implements Serializable {
 
     public String imageUrl;
 
-    public LocalDateTime createdAt = LocalDateTime.now();
+    public LocalDateTime createdAt;
 
-
+    private boolean deleted;
 }
