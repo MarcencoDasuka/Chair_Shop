@@ -4,6 +4,7 @@ package com.ChairShop.controller;
 import com.ChairShop.model.constants.ApiLogMessage;
 import com.ChairShop.model.dto.chair.ChairDTO;
 import com.ChairShop.model.dto.chair.ChairSearchDTO;
+import com.ChairShop.model.request.chair.ChairSearchRequest;
 import com.ChairShop.model.request.chair.NewChairRequest;
 import com.ChairShop.model.request.chair.UpdateChairRequest;
 import com.ChairShop.model.response.IamResponse;
@@ -79,10 +80,18 @@ public class ChairController {
         Pageable pageable = PageRequest.of(page, limit);
         IamResponse<PaginationResponse<ChairSearchDTO>> response = chairService.findAllChairs(pageable);
         return ResponseEntity.ok(response);
+    }
 
-
-
-
+    @PostMapping ("/search")
+    public ResponseEntity<IamResponse<PaginationResponse<ChairSearchDTO>>> searchChair(
+            @RequestBody @Valid ChairSearchRequest request,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "limit", defaultValue = "3") int limit
+            ){
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+        Pageable pageable = PageRequest.of(page, limit);
+        IamResponse<PaginationResponse<ChairSearchDTO>> response = chairService.searchChair(request, pageable);
+        return ResponseEntity.ok(response);
     }
 
 }

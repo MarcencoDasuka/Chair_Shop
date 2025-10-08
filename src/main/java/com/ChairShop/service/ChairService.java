@@ -3,6 +3,7 @@ package com.ChairShop.service;
 
 import com.ChairShop.model.dto.chair.ChairDTO;
 import com.ChairShop.model.dto.chair.ChairSearchDTO;
+import com.ChairShop.model.request.chair.ChairSearchRequest;
 import com.ChairShop.model.request.chair.NewChairRequest;
 import com.ChairShop.model.request.chair.UpdateChairRequest;
 import com.ChairShop.model.response.IamResponse;
@@ -22,5 +23,7 @@ public interface ChairService {
     void softDeleteChair (@NotNull Integer id);
 
     IamResponse<PaginationResponse<ChairSearchDTO>> findAllChairs(Pageable pageable);
+
+    IamResponse<PaginationResponse<ChairSearchDTO>> searchChair (@NotNull ChairSearchRequest chairSearchRequest, Pageable pageable);
 
 }

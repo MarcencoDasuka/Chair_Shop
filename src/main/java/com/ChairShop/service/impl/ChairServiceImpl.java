@@ -7,16 +7,19 @@ import com.ChairShop.model.dto.chair.ChairSearchDTO;
 import com.ChairShop.model.enteties.Chair;
 import com.ChairShop.model.exception.DataExistException;
 import com.ChairShop.model.exception.NotFoundException;
+import com.ChairShop.model.request.chair.ChairSearchRequest;
 import com.ChairShop.model.request.chair.NewChairRequest;
 import com.ChairShop.model.request.chair.UpdateChairRequest;
 import com.ChairShop.model.response.IamResponse;
 import com.ChairShop.model.response.PaginationResponse;
 import com.ChairShop.repositories.ChairRepository;
+import com.ChairShop.repositories.criterial.ChairSearchCriteria;
 import com.ChairShop.service.ChairService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -26,7 +29,7 @@ import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
-public class ChairServiceImpl implements ChairService{
+public class ChairServiceImpl implements ChairService {
 
     private final ChairRepository chairRepository;
     private final ChairMapper chairMapper;
@@ -35,7 +38,7 @@ public class ChairServiceImpl implements ChairService{
     @Override
     public IamResponse<ChairDTO> getById(@NotNull Integer chairId) {
         Chair chair = chairRepository.findByIdAndDeletedFalse(chairId)
-                .orElseThrow(()->new NotFoundException(ApiErrorMessage.CHAIR_WITH_ID_NOT_FOUND.getMessage(chairId)));
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.CHAIR_WITH_ID_NOT_FOUND.getMessage(chairId)));
 
 
 //        ChairDTO chairDTO = ChairDTO.builder()
@@ -56,7 +59,7 @@ public class ChairServiceImpl implements ChairService{
 
     @Override
     public IamResponse<ChairDTO> createChair(@NotNull NewChairRequest newChairRequest) {
-        if (chairRepository.existsByName(newChairRequest.getName())){
+        if (chairRepository.existsByName(newChairRequest.getName())) {
             throw new DataExistException(ApiErrorMessage.CHAIR_WITH_NAME_ALREADY_EXISTS.getMessage(newChairRequest.getName()));
         }
 
@@ -70,8 +73,8 @@ public class ChairServiceImpl implements ChairService{
     @Override
     public IamResponse<ChairDTO> updateChair(@NotNull Integer id, @NotNull UpdateChairRequest request) {
         Chair chair = chairRepository.findByIdAndDeletedFalse(id)
-                .orElseThrow(()->new NotFoundException(ApiErrorMessage.CHAIR_WITH_ID_NOT_FOUND.getMessage(id)));
-        chairMapper.updateChair(chair,request);
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.CHAIR_WITH_ID_NOT_FOUND.getMessage(id)));
+        chairMapper.updateChair(chair, request);
         chair.setUpdatedAt(LocalDateTime.now());
         chair = chairRepository.save(chair);
 
@@ -82,7 +85,7 @@ public class ChairServiceImpl implements ChairService{
     @Override
     public void softDeleteChair(Integer id) {
         Chair chair = chairRepository.findByIdAndDeletedFalse(id)
-                .orElseThrow(()->new NotFoundException(ApiErrorMessage.CHAIR_WITH_ID_NOT_FOUND.getMessage(id)));
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.CHAIR_WITH_ID_NOT_FOUND.getMessage(id)));
         chair.setDeleted(true);
         chairRepository.save(chair);
     }
@@ -96,12 +99,33 @@ public class ChairServiceImpl implements ChairService{
                 chairs.getContent(),
                 new PaginationResponse.Pagination(
                         chairs.getTotalElements(),
-                        chairs.getNumber() +1,
+                        chairs.getNumber() + 1,
                         pageable.getPageSize(),
                         chairs.getTotalPages()
                 )
         );
         return IamResponse.createSuccessful(response);
     }
-}
 
+    @Override
+    public IamResponse<PaginationResponse<ChairSearchDTO>> searchChair(
+            @NotNull ChairSearchRequest request,
+            Pageable pageable) {
+        Specification<Chair> specification = new ChairSearchCriteria(request);
+        Page<ChairSearchDTO> chairs = chairRepository.findAll(specification, pageable)
+                .map(chairMapper::toChairSearchDTO);
+
+        PaginationResponse<ChairSearchDTO> response = PaginationResponse.<ChairSearchDTO>builder()
+                .content(chairs.getContent())
+                .pagination(PaginationResponse.Pagination.builder()
+                        .total(chairs.getTotalElements())
+                        .limit(pageable.getPageSize())
+                        .page(chairs.getNumber() + 1)
+                        .pages(chairs.getTotalPages())
+                        .build())
+                .build();
+
+        return IamResponse.createSuccessful(response);
+    }
+
+}
