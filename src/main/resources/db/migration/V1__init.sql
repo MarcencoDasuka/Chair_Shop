@@ -28,6 +28,27 @@ CREATE TABLE users(
 
 --------------------------------------------------------------------
 
+CREATE TABLE roles (
+                        id SERIAL PRIMARY KEY,
+                        name VARCHAR(50) NOT NULL,
+                        user_system_role VARCHAR(50) NOT NULL,
+                        active BOOLEAN NOT NULL DEFAULT true,
+                        created_by VARCHAR(50) NOT NULL
+
+);
+--------------------------------------------------------------------
+
+CREATE TABLE user_roles(
+                            user_id BIGINT NOT NULL,
+                            role_id INT NOT NULL,
+                            PRIMARY KEY (user_id, role_id),
+                            FOREIGN KEY (user_id) REFERENCES users(id),
+                            FOREIGN KEY (role_id) REFERENCES roles(id)
+
+);
+
+
+--------------------------------------------------------------------
 
 -- Каждому пользователю — одна корзина.
 -- При удалении пользователя корзина удаляется автоматически.
@@ -110,9 +131,9 @@ VALUES
 
 INSERT INTO users(username, password, email, created, updated, registration_status, last_login, deleted)
 VALUES
-    ('fisrt', '$2a$10$Ixan2nE1CBnpYQE97wmjUuoCAeO2aQ/6WaB3rIcPWG.puEVn0E1RO', 'first@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false),
-    ('two', '$2a$10$Ixan2nE1CBnpYQE97wmjUuoCAeO2aQ/6WaB3rIcPWG.puEVn0E1RO', 'two@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false),
-    ('three', '$2a$10$Ixan2nE1CBnpYQE97wmjUuoCAeO2aQ/6WaB3rIcPWG.puEVn0E1RO', 'three@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false);
+    ('Super_Admin', '$2a$10$Ixan2nE1CBnpYQE97wmjUuoCAeO2aQ/6WaB3rIcPWG.puEVn0E1RO', 'SuperAdmin@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false),
+    ('Admin', '$2a$10$Ixan2nE1CBnpYQE97wmjUuoCAeO2aQ/6WaB3rIcPWG.puEVn0E1RO', 'Admin@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false),
+    ('User', '$2a$10$Ixan2nE1CBnpYQE97wmjUuoCAeO2aQ/6WaB3rIcPWG.puEVn0E1RO', 'User@gmail.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE', CURRENT_TIMESTAMP, false);
 
 
 
@@ -139,3 +160,18 @@ VALUES
     (1, 1, 1),
     (2, 2, 1),
     (3, 3, 1);
+
+
+--------------------------------------------------------------------
+
+INSERT INTO roles (name, user_system_role, created_by)
+VALUES
+    ('SUPER_ADMIN','SUPER_ADMIN','SUPER_ADMIN' ),
+    ('ADMIN', 'ADMIN', 'SUPER_ADMIN'),
+    ('USER', 'USER', 'SUPER_ADMIN');
+
+INSERT INTO user_roles (user_id, role_id)
+VALUES
+    (1,1),
+    (2,2),
+    (3,3);
