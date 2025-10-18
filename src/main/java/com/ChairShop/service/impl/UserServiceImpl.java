@@ -4,21 +4,26 @@ import com.ChairShop.mapper.UserMapper;
 import com.ChairShop.model.constants.ApiErrorMessage;
 import com.ChairShop.model.dto.User.FullUserDTO;
 import com.ChairShop.model.dto.User.UserDTO;
+import com.ChairShop.model.enteties.Role;
 import com.ChairShop.model.enteties.ShoppingCart;
 import com.ChairShop.model.enteties.User;
 import com.ChairShop.model.exception.DataExistException;
 import com.ChairShop.model.exception.NotFoundException;
 import com.ChairShop.model.request.user.NewUserRequest;
 import com.ChairShop.model.response.IamResponse;
+import com.ChairShop.repositories.RoleRepository;
 import com.ChairShop.repositories.ShoppingCartRepository;
 import com.ChairShop.repositories.UserRepository;
 import com.ChairShop.service.UserService;
+import com.ChairShop.service.model.IamServiceUserRole;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public IamResponse<FullUserDTO> getFullUserById(@NotNull Integer id) {
@@ -47,6 +53,8 @@ public class UserServiceImpl implements UserService {
             throw new DataExistException(ApiErrorMessage.USER_WITH_EMAIL_ALREADY_EXISTS.getMessage(newUserRequest.getEmail()));
         }
 
+
+
         User user = userMapper.createUser(newUserRequest);
         user.setLast_login(LocalDateTime.now());
 
@@ -55,6 +63,12 @@ public class UserServiceImpl implements UserService {
         user.setShoppingCart(cart);
         user.setPassword(passwordEncoder.encode(newUserRequest.getPassword()));
 
+        Role role = roleRepository.findByName(IamServiceUserRole.USER.getRole())
+                        .orElseThrow(() -> new NotFoundException(ApiErrorMessage.ROLE_WITH_NAME_NOT_FOUND.getMessage(IamServiceUserRole.USER.getRole())));
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
         userRepository.save(user);
 
         UserDTO userDTO = userMapper.toDTO(user);

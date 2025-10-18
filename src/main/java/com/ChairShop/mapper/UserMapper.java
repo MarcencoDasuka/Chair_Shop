@@ -4,6 +4,8 @@ import com.ChairShop.model.dto.Cart_item.CartItemDTO;
 import com.ChairShop.model.dto.Shopping_cart.ShoppingCartDTO;
 import com.ChairShop.model.dto.User.FullUserDTO;
 import com.ChairShop.model.dto.User.UserDTO;
+import com.ChairShop.model.dto.role.RoleDTO;
+import com.ChairShop.model.enteties.Role;
 import com.ChairShop.model.enteties.ShoppingCart;
 import com.ChairShop.model.enteties.User;
 import com.ChairShop.model.enums.RegistrationStatus;
@@ -13,6 +15,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Mapper(
@@ -24,6 +28,7 @@ public interface UserMapper {
 
     @Mapping(source = "last_login", target = "lastLogin")
     @Mapping(target = "shoppingCart", expression = "java(mapShoppingCart(user.getShoppingCart()))")
+    @Mapping(target = "roles", expression = "java(mapRoles(user.getRoles()))")
     FullUserDTO toFullDTO(User user);
 
     // --- метод для маппинга корзины ---
@@ -54,6 +59,7 @@ public interface UserMapper {
 
 
     @Mapping(source = "last_login", target = "lastLogin")
+    @Mapping(target = "roles", expression = "java(mapRoles(user.getRoles()))")
     UserDTO toDTO(User user);
 
 
@@ -63,5 +69,9 @@ public interface UserMapper {
     @Mapping(target = "registrationStatus", expression = "java(RegistrationStatus.ACTIVE)")
     User createUser(NewUserRequest newUserRequest);
 
-
+    default List<RoleDTO> mapRoles (Collection<Role> roles){
+        return roles.stream()
+                .map(role -> new RoleDTO(role.getId(), role.getName()))
+                .toList();
+    };
 }
