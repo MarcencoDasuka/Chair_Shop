@@ -1,6 +1,5 @@
 package com.ChairShop.controller;
 
-
 import com.ChairShop.model.constants.ApiLogMessage;
 import com.ChairShop.model.dto.chair.ChairDTO;
 import com.ChairShop.model.dto.chair.ChairSearchDTO;

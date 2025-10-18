@@ -29,8 +29,6 @@ public class UpdateChairRequest implements Serializable {
     @NotBlank(message = "imageUrl Can not be empty")
     private String imageUrl;
 
-
-
 }
 
 

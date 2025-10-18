@@ -9,12 +9,19 @@ import lombok.Getter;
 public enum ApiErrorMessage {
     CHAIR_WITH_ID_NOT_FOUND("Chair with Id %s was not found"),
     CHAIR_WITH_NAME_ALREADY_EXISTS("Chair with name %s already exists"),
+
+    USER_WITH_ID_NOT_FOUND("User with ID: %s not found"),
+    USER_WITH_NAME_ALREADY_EXISTS("User with name: '%s' already exists"),
+    USER_WITH_EMAIL_ALREADY_EXISTS("User with email: '%s' already exists"),
+
+    CART_WITH_USER_ID_NOT_FOUND("Cart with user ID: %s not found"),
+
     ;
 
-    private final String message;
+    private String message;
 
-    public String getMessage(Object... arg){
-        return String.format(message, arg);
+    public String getMessage(Object... args) {
+        return String.format(message, args);
     }
 
 }

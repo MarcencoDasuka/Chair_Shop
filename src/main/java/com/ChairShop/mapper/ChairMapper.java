@@ -23,16 +23,6 @@ import java.util.Objects;
 public interface ChairMapper {
 
 
-//    @Mapping(source = "id", target = "id")
-//    @Mapping(source = "name", target = "name")
-//    @Mapping(source = "description", target = "description")
-//    @Mapping(source = "category", target = "category")
-//    @Mapping(source = "price", target = "price")
-//    @Mapping(source = "stock", target = "stock")
-//    @Mapping(source = "material", target = "material")
-//    @Mapping(source = "imageUrl", target = "imageUrl")
-//    @Mapping(source = "createAt", target = "CreateAt", dateFormat = "yyyy-MM-DD'T'HH:mm:ss")
-//    @Mapping(source = "updateAt", target = "updateAt", dateFormat = "yyyy-MM-DD'T'HH:mm:ss")
     ChairDTO toChairDTO(Chair chair);
 
 
