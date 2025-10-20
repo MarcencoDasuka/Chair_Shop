@@ -16,10 +16,8 @@ public class ShoppingCartMapperImpl implements ShoppingCartMapper {
             CartItemDTO cartItemDTO = new CartItemDTO();
             cartItemDTO.setId(item.getId());
             cartItemDTO.setQuantity(item.getQuantity());
-            cartItemDTO.setBrand(item.getChair().getBrand());
             cartItemDTO.setName(item.getChair().getName());
             cartItemDTO.setPrice(item.getChair().getPrice());
-            cartItemDTO.setType(item.getChair().getType());
             cartItemDTO.setDescription(item.getChair().getDescription());
             cartItemDTO.setImageUrl(item.getChair().getImageUrl());
             return cartItemDTO;

@@ -44,8 +44,6 @@ public interface UserMapper {
                     CartItemDTO itemDTO = new CartItemDTO();
                     itemDTO.setId(item.getId());
                     itemDTO.setName(item.getChair().getName());
-                    itemDTO.setBrand(item.getChair().getBrand());
-                    itemDTO.setType(item.getChair().getType());
                     itemDTO.setPrice(item.getChair().getPrice().floatValue());
                     itemDTO.setDescription(item.getChair().getDescription());
                     itemDTO.setImageUrl(item.getChair().getImageUrl());
@@ -80,7 +78,6 @@ public interface UserMapper {
 
     @Mapping(target = "roles", expression = "java(mapRoles(user.getRoles()))")
     @Mapping(target = "username", source = "user.username")
-    @Mapping(target = "id", source = "id")
     @Mapping(target = "email", source = "user.email")
     @Mapping(target = "token", source = "token")
     UserProfileDTO toUserProfileDTO(User user, String token);

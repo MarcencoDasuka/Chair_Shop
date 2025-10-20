@@ -33,11 +33,6 @@ public class Chair {
     @Column (nullable = false)
     public String category;
 
-    @Column(nullable = false)
-    public String brand;
-
-    @Column(nullable = false)
-    public String type;
 
     @Column (nullable = false)
     public Float price;
