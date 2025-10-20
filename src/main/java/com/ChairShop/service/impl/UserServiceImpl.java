@@ -18,12 +18,16 @@ import com.ChairShop.service.UserService;
 import com.ChairShop.service.model.IamServiceUserRole;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -128,5 +132,26 @@ public class UserServiceImpl implements UserService {
 
 
         return IamResponse.createSuccessful(userDTO);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String Email) throws UsernameNotFoundException {
+        return getUserDetails(Email, userRepository);
+    }
+
+    static  UserDetails getUserDetails(String email, UserRepository userRepository) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_EMAIL_NOT_FOUND.getMessage()));
+
+        user.setLast_login(LocalDateTime.now());
+        userRepository.save(user);
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                user.getRoles().stream()
+                        .map(role -> new SimpleGrantedAuthority(role.getName()))
+                        .collect(Collectors.toList())
+        );
     }
 }

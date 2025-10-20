@@ -4,6 +4,7 @@ import com.ChairShop.model.dto.Cart_item.CartItemDTO;
 import com.ChairShop.model.dto.Shopping_cart.ShoppingCartDTO;
 import com.ChairShop.model.dto.User.FullUserDTO;
 import com.ChairShop.model.dto.User.UserDTO;
+import com.ChairShop.model.dto.User.UserProfileDTO;
 import com.ChairShop.model.dto.role.RoleDTO;
 import com.ChairShop.model.enteties.Role;
 import com.ChairShop.model.enteties.ShoppingCart;
@@ -74,4 +75,14 @@ public interface UserMapper {
                 .map(role -> new RoleDTO(role.getId(), role.getName()))
                 .toList();
     };
+
+
+
+    @Mapping(target = "roles", expression = "java(mapRoles(user.getRoles()))")
+    @Mapping(target = "username", source = "user.username")
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "email", source = "user.email")
+    @Mapping(target = "token", source = "token")
+    UserProfileDTO toUserProfileDTO(User user, String token);
+
 }

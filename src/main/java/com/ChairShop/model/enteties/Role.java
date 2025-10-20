@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Table(name = "roles")
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Setter
 public class Role {
     @Id
