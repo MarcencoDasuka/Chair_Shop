@@ -13,11 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import jakarta.servlet.http.Cookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Slf4j
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @PostMapping("/login")
     public ResponseEntity<?> login (
@@ -38,6 +37,15 @@ public class AuthController {
         return ResponseEntity.ok(result);
     }
 
-
+    @GetMapping("/refresh/token")
+    public ResponseEntity<IamResponse<UserProfileDTO>> refreshToken(
+            @RequestParam(name = "token") String refreshToken,
+            HttpServletResponse response){
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+        IamResponse<UserProfileDTO> result = authService.refreshAccessToken(refreshToken);
+        Cookie authCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
+        response.addCookie(authCookie);
+        return ResponseEntity.ok(result);
+    }
 
 }

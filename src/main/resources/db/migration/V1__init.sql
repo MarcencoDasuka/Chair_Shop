@@ -82,6 +82,18 @@ CREATE TABLE cart_items (
 
 --------------------------------------------------------------------
 
+CREATE TABLE refresh_tokens(
+                               id SERIAL PRIMARY KEY,
+                                token VARCHAR(128) NOT NULL,
+                                created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                user_id BIGINT NOT NULL,
+                                CONSTRAINT FK_refresh_token_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+                                CONSTRAINT refresh_token_UNIQUE UNIQUE (user_id, id)
+);
+
+
+
+
 INSERT INTO chairs (name, description, category, price, stock, material, image_url)
 VALUES
     ('Офисный стул Comfort',
@@ -176,3 +188,6 @@ VALUES
     (1,1),
     (2,2),
     (3,3);
+
+--------------------------------------------------------------------
+

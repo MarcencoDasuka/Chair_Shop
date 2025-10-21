@@ -7,5 +7,8 @@ import com.ChairShop.model.response.IamResponse;
 import jakarta.validation.constraints.NotNull;
 
 public interface AuthService {
+
     IamResponse<UserProfileDTO> loginUser (@NotNull LoginRequest request);
+
+    IamResponse<UserProfileDTO> refreshAccessToken (@NotNull String refreshToken);
 }
