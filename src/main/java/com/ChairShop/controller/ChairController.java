@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Iterator;
 
 @Slf4j
@@ -43,10 +44,10 @@ public class ChairController {
 
     @PostMapping("/create")
     public ResponseEntity<IamResponse<ChairDTO>> createChair(
-            @RequestBody @Valid NewChairRequest newChairRequest) {
+            @RequestBody @Valid NewChairRequest newChairRequest, Principal principal) {
     log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
 
-        IamResponse<ChairDTO> response = chairService.createChair(newChairRequest);
+        IamResponse<ChairDTO> response = chairService.createChair(newChairRequest, principal.getName());
 
         return ResponseEntity.ok(response);
     }

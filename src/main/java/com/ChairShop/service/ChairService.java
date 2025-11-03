@@ -16,7 +16,7 @@ import java.lang.annotation.IncompleteAnnotationException;
 public interface ChairService {
     IamResponse<ChairDTO> getById (@NotNull Integer chairId);
 
-    IamResponse<ChairDTO> createChair (@NotNull NewChairRequest newChairRequest);
+    IamResponse<ChairDTO> createChair (@NotNull NewChairRequest newChairRequest, String userName);
 
     IamResponse<ChairDTO> updateChair (@NotNull Integer id, @NotNull UpdateChairRequest updateChairRequest);
 

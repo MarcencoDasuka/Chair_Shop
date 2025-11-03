@@ -1,12 +1,13 @@
 package com.ChairShop.controller;
 
 import com.ChairShop.model.constants.ApiLogMessage;
-import com.ChairShop.model.dto.User.LoginRequest;
+import com.ChairShop.model.request.user.LoginRequest;
 import com.ChairShop.model.dto.User.UserProfileDTO;
+import com.ChairShop.model.request.user.RegistrationUserRequest;
 import com.ChairShop.model.response.IamResponse;
 import com.ChairShop.service.AuthService;
 import com.ChairShop.utils.ApiUtils;
-import jakarta.servlet.http.HttpServletRequest;
+import com.fasterxml.classmate.util.LRUTypeCache;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,4 +49,16 @@ public class AuthController {
         return ResponseEntity.ok(result);
     }
 
+
+    @PostMapping("/registr")
+    public ResponseEntity<?> registration (
+            @RequestBody @Valid RegistrationUserRequest request,
+            HttpServletResponse response){
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+        IamResponse<UserProfileDTO> result = authService.registrationUser(request);
+        Cookie authCookie  = ApiUtils.createAuthCookie(result.getPayload().getToken());
+        response.addCookie(authCookie);
+
+        return ResponseEntity.ok(result);
+    }
 }

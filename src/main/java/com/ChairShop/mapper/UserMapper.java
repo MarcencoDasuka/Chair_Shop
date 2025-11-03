@@ -11,6 +11,7 @@ import com.ChairShop.model.enteties.ShoppingCart;
 import com.ChairShop.model.enteties.User;
 import com.ChairShop.model.enums.RegistrationStatus;
 import com.ChairShop.model.request.user.NewUserRequest;
+import com.ChairShop.model.request.user.RegistrationUserRequest;
 import org.hibernate.type.descriptor.DateTimeUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -68,6 +69,11 @@ public interface UserMapper {
     @Mapping(target = "registrationStatus", expression = "java(RegistrationStatus.ACTIVE)")
     User createUser(NewUserRequest newUserRequest);
 
+    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "registrationStatus",expression = "java(RegistrationStatus.ACTIVE)")
+    User fromDTO(RegistrationUserRequest request);
+
     default List<RoleDTO> mapRoles (Collection<Role> roles){
         return roles.stream()
                 .map(role -> new RoleDTO(role.getId(), role.getName()))
@@ -84,3 +90,7 @@ public interface UserMapper {
     UserProfileDTO toUserProfileDTO(User user, String token, String refreshToken);
 
 }
+
+
+
+

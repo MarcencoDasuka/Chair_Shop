@@ -1,4 +1,4 @@
-package com.ChairShop.model.dto.User;
+package com.ChairShop.model.request.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
