@@ -14,6 +14,7 @@ import com.ChairShop.model.response.IamResponse;
 import com.ChairShop.repositories.RoleRepository;
 import com.ChairShop.repositories.ShoppingCartRepository;
 import com.ChairShop.repositories.UserRepository;
+import com.ChairShop.security.validation.AccessValidator;
 import com.ChairShop.service.UserService;
 import com.ChairShop.service.model.IamServiceUserRole;
 import jakarta.validation.constraints.NotNull;
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final AccessValidator accessValidator;
 
     @Override
     public IamResponse<FullUserDTO> getFullUserById(@NotNull Integer id) {
@@ -58,7 +60,6 @@ public class UserServiceImpl implements UserService {
         }
 
 
-
         User user = userMapper.createUser(newUserRequest);
         user.setLast_login(LocalDateTime.now());
 
@@ -68,11 +69,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(newUserRequest.getPassword()));
 
         Role role = roleRepository.findByName(IamServiceUserRole.USER.getRole())
-                        .orElseThrow(() -> new NotFoundException(ApiErrorMessage.ROLE_WITH_NAME_NOT_FOUND.getMessage(IamServiceUserRole.USER.getRole())));
-
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.ROLE_WITH_NAME_NOT_FOUND.getMessage(IamServiceUserRole.USER.getRole())));
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         user.setRoles(roles);
+
         userRepository.save(user);
 
         UserDTO userDTO = userMapper.toDTO(user);
@@ -109,6 +110,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(id)));
 
+        accessValidator.validateAdminOrOwnerAccess(user.getId());
+
         if(newUserRequest.getEmail() != null && !newUserRequest.getEmail().isBlank()) {
             if(userRepository.existsByEmailAndIdNot(newUserRequest.getEmail(), id)){
                 throw new DataExistException(ApiErrorMessage.USER_WITH_EMAIL_ALREADY_EXISTS.getMessage());
@@ -134,9 +137,10 @@ public class UserServiceImpl implements UserService {
         return IamResponse.createSuccessful(userDTO);
     }
 
+
     @Override
-    public UserDetails loadUserByUsername(String Email) throws UsernameNotFoundException {
-        return getUserDetails(Email, userRepository);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return getUserDetails(email, userRepository);
     }
 
     static  UserDetails getUserDetails(String email, UserRepository userRepository) {

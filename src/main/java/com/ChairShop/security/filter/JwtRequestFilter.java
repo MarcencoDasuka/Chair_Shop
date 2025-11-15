@@ -53,20 +53,22 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 }
 
                 Optional<String> emailOpt = Optional.ofNullable(jwtTokenProvider.getUsername(jwt));
-                emailOpt.ifPresent(email -> {
+                Optional<String> userIdOtp = Optional.ofNullable(jwtTokenProvider.getUserId(jwt));
+
+                if (emailOpt.isPresent() && userIdOtp.isPresent()) {
                     if (SecurityContextHolder.getContext().getAuthentication() == null) {
                         List<SimpleGrantedAuthority> authorities = jwtTokenProvider.getRoles(jwt).stream()
                                 .map(SimpleGrantedAuthority::new)
                                 .collect(Collectors.toList());
 
                         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                                email,
-                                null,
+                                emailOpt.get(),
+                                jwt,
                                 authorities
                         );
                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     }
-                });
+                }
 
             } catch (ExpiredJwtException e) {
                 handleTokenExpiration(requestURI, jwt, response);
@@ -91,7 +93,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
     }
 
-
     private void handleSignatureException(HttpServletResponse response) throws IOException {
         sendErrorResponse(response, HttpStatus.UNAUTHORIZED, ApiErrorMessage.INVALID_TOKEN_SIGNATURE.getMessage());
     }
@@ -110,3 +111,5 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         return uri.equals(LOGIN_PATH) || uri.equals(REGISTER_PATH);
     }
 }
+
+

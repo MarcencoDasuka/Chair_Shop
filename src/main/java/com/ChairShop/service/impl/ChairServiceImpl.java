@@ -16,6 +16,7 @@ import com.ChairShop.model.response.PaginationResponse;
 import com.ChairShop.repositories.ChairRepository;
 import com.ChairShop.repositories.UserRepository;
 import com.ChairShop.repositories.criterial.ChairSearchCriteria;
+import com.ChairShop.security.validation.AccessValidator;
 import com.ChairShop.service.ChairService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +38,13 @@ public class ChairServiceImpl implements ChairService {
     private final ChairMapper chairMapper;
     private final CharacterEncodingFilter characterEncodingFilter;
     private final UserRepository userRepository;
+    private final AccessValidator accessValidator;
 
     @Override
     public IamResponse<ChairDTO> getById(@NotNull Integer chairId) {
         Chair chair = chairRepository.findByIdAndDeletedFalse(chairId)
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.CHAIR_WITH_ID_NOT_FOUND.getMessage(chairId)));
+
 
 
 //        ChairDTO chairDTO = ChairDTO.builder()
@@ -56,7 +59,6 @@ public class ChairServiceImpl implements ChairService {
 //                .imageUrl(chair.getImageUrl())
 //                .updatedAt(chair.getUpdatedAt())
 //                .build();
-
         return IamResponse.createSuccessful(chairMapper.toChairDTO(chair));
     }
 
