@@ -50,7 +50,7 @@ public class AuthController {
     }
 
 
-    @PostMapping("/registr")
+    @PostMapping("/register")
     public ResponseEntity<?> registration (
             @RequestBody @Valid RegistrationUserRequest request,
             HttpServletResponse response){

@@ -36,8 +36,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(request.getUserId())));
 
         // - проверка существует ли велосипед
-        Chair bicycle = chairRepository.findByIdAndDeletedFalse(request.getBicycleId())
-                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.CHAIR_WITH_ID_NOT_FOUND.getMessage(request.getBicycleId())));
+        Chair bicycle = chairRepository.findByIdAndDeletedFalse(request.getChairId())
+                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.CHAIR_WITH_ID_NOT_FOUND.getMessage(request.getChairId())));
 
         // - проверка есть ли у пользователя корзина
         ShoppingCart cart = user.getShoppingCart();
@@ -52,7 +52,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         // - проверяем есть ли уже этот велик в корзине
         CartItem existingItem = cart.getItems().stream() // - получаем список великов
-                .filter(item -> item.getChair().getId().equals(request.getBicycleId())) // - сравниваем все айдишники великов с карзины с тем который ищем
+                .filter(item -> item.getChair().getId().equals(request.getChairId())) // - сравниваем все айдишники великов с карзины с тем который ищем
                 .findFirst() // - первое совпадение будет присвоено к existingItem
                 .orElse(null); // - если не найдется то existingItem = null (в корзине нету этого велика)
 

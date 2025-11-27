@@ -55,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(NOT_SECURED_URLS).permitAll()
 
+
                         .requestMatchers(get("/users/all")).hasAnyAuthority(adminAccessSecurityRoles())
                         .requestMatchers(get("/users/full/{id}")).hasAnyAuthority(adminAccessSecurityRoles())
                         .requestMatchers(post("/users/create")).hasAnyAuthority(adminAccessSecurityRoles())

@@ -12,8 +12,8 @@ public class AddToShoppingCart {
     @NotNull(message = "userId cannot be empty")
     private Integer userId;
 
-    @NotNull(message = "bicycleId cannot be empty")
-    private Integer bicycleId;
+    @NotNull(message = "chairId cannot be empty")
+    private Integer chairId;
 
     @NotNull(message = "quantity cannot be empty")
     private Integer quantity;

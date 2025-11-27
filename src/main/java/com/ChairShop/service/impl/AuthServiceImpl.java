@@ -3,6 +3,7 @@ package com.ChairShop.service.impl;
 import com.ChairShop.mapper.UserMapper;
 import com.ChairShop.model.constants.ApiErrorMessage;
 import com.ChairShop.model.enteties.Role;
+import com.ChairShop.model.enteties.ShoppingCart;
 import com.ChairShop.model.exception.DataExistException;
 import com.ChairShop.model.exception.InvalidPasswordException;
 import com.ChairShop.model.exception.NotFoundException;
@@ -14,6 +15,7 @@ import com.ChairShop.model.exception.iInvalidException;
 import com.ChairShop.model.request.user.RegistrationUserRequest;
 import com.ChairShop.model.response.IamResponse;
 import com.ChairShop.repositories.RoleRepository;
+import com.ChairShop.repositories.ShoppingCartRepository;
 import com.ChairShop.repositories.UserRepository;
 import com.ChairShop.security.JwtTokenProvider;
 import com.ChairShop.security.validation.AccessValidator;
@@ -33,6 +35,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccessValidator accessValidator;
-
+    private final ShoppingCartRepository shoppingCartRepository;
  //   private final ParameterScriptAssertValidator parameterScriptAssertValidator;
 
     @Override
@@ -104,6 +107,11 @@ public class AuthServiceImpl implements AuthService {
         roles.add(userRole);
         newUser.setRoles(roles);
         userRepository.save(newUser);
+
+        ShoppingCart cart = new ShoppingCart();
+        cart.setUser(newUser);
+        cart.setItems(new ArrayList<>()); // если у тебя поле items не null по дефолту
+        shoppingCartRepository.save(cart);
 
          RefreshToken refreshToken = refreshTokenService.generateOrUpdateRefreshToken(newUser);
          String token = jwtTokenProvider.generateToken(newUser);

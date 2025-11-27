@@ -43,7 +43,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public IamResponse<FullUserDTO> getFullUserById(@NotNull Integer id) {
         User user = userRepository.findByIdAndDeletedFalse(id)
-                .orElseThrow(() -> new NotFoundException(ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(id)));
+                .orElseThrow(() -> new NotFoundException
+                        (ApiErrorMessage.USER_WITH_ID_NOT_FOUND.getMessage(id)));
 
         FullUserDTO fullUserDTO = userMapper.toFullDTO(user);
         return IamResponse.createSuccessful(fullUserDTO);

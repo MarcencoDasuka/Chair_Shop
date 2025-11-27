@@ -1,5 +1,6 @@
 package com.ChairShop.model.enteties;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class CartItem {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id", nullable = false)
+    @JsonBackReference
     private ShoppingCart cart;
 
     @ManyToOne(fetch = FetchType.EAGER)
