@@ -1,0 +1,61 @@
+package com.ChairShop.model.enteties;
+
+import com.ChairShop.model.enums.RegistrationStatus;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.util.Predicates;
+
+import java.time.LocalDateTime;
+import java.util.Collection;
+
+@Entity
+@Table(name = "users")
+@Getter
+@Setter
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Size(max = 30)
+    @Column(length = 30, nullable = false, unique = true)
+    private String username;
+
+    @Size(max = 80)
+    @Column(length = 80, nullable = false)
+    private String password;
+
+    @Size(max = 50)
+    @Column(length = 50, nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private LocalDateTime created = LocalDateTime.now();
+
+    @Column(nullable = false)
+    private LocalDateTime updated = LocalDateTime.now();
+
+    @Column(nullable = false)
+    private LocalDateTime last_login;
+
+    @Column(nullable = false)
+    private Boolean deleted = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "registration_status")
+    private RegistrationStatus registrationStatus;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private ShoppingCart shoppingCart;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn (name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Collection<Role> roles;
+}
